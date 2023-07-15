@@ -39,12 +39,12 @@ type Notifier interface {
 	Start(context.Context) error
 }
 
-// WebhookNotifierService describes a webservice to send a message (json)
+// WebhookNotifierService describes a webservice to send a message to using json 
+// It's wrapped by an HTTPNotifier handling the request
 type WebhookNotifierService interface {
 	Send(ctx context.Context, client utils.HTTPClient, notif Notification) (error)
 	Start() error
 }
-
 
 // Formatter create text content for a given Notifier
 // This can be used to format text differently depending on notifier
@@ -54,6 +54,7 @@ type Formatter interface {
 	Text(n Notification) string
 }
 
+// FormatterFactory returns a Formatter of a given Notifier name like 'email', 'slack', ...
 type FormatterFactory interface {
 	Get(notifierName string) Formatter
 }

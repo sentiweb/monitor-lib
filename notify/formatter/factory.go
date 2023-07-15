@@ -19,11 +19,12 @@ var (
 	defaultFormatterFactory types.FormatterFactory = &DefaultFormatterFactory{}
 )
 
-// Change the formatter Factory
+// SetDefaultFactory Changes the formatter Factory
 func SetDefaultFactory(factory types.FormatterFactory) {
 	defaultFormatterFactory = factory
 }
 
+// Get the formatter for the given notifier name, using the default factory
 func Get(notifierName string) types.Formatter {
 	return defaultFormatterFactory.Get(notifierName)
 }

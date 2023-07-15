@@ -8,12 +8,18 @@ import(
 	
 )
 
+// NotificationHandler listen for notification from a channel
+// and route them to a list of Notifiers.
+// Routing is handled by tags. Each notifier can accept a list of tags
+// Notifier can be added with AddNotifier() method
+// Handle() method starts to listen from the provided channel
 type NotificationHandler struct {
 	timeout time.Duration
 	debug bool
 	channels []types.Notifier
 }
 
+// NewNotificationHandler creates a NotificationHandler
 func NewNotificationHandler(timeout time.Duration) *NotificationHandler {
 	return &NotificationHandler{timeout: timeout}
 }
@@ -26,6 +32,7 @@ func (h *NotificationHandler) AddNotifier(channel types.Notifier) {
 	h.channels = append(h.channels, channel)
 }
 
+// Handle starts the listenning for notification from the input channel
 func (h *NotificationHandler) Handle(ctx context.Context, input <-chan types.Notification) error {
 	log.Printf("Starting Notification Hander with %s timeout", h.timeout)
 	

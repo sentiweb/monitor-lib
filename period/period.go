@@ -6,12 +6,12 @@ import (
 	"strings"
 )
 
-// Period describes a period element for which you test if a value is included
+// Period describes a period element for which you can test if a value is included
 type Period interface {
 	In(v int) bool
 }
 
-// PeriodeValue defines a value
+// PeriodeValue defines a fixed value
 type PeriodeValue struct {
 	Value int
 }
@@ -20,19 +20,19 @@ func (p PeriodeValue) In(v int) bool {
 	return p.Value == v
 }
 
-// PeriodRange defines a range of value
+// PeriodRange defines a range of values
 type PeriodRange struct {
 	Min int
 	Max int
 }
 
-// In check if value in included in range
+// In check if a value is in included in range
 func (p PeriodRange) In(v int) bool {
 	return v >= p.Min && v <= p.Max
 }
 
 // PeriodDefinition  Defines criteria to match a ref time
-// Like a Cron
+// Like a Cron period definition.
 type PeriodDefinition  struct {
 	Minutes []Period
 	Hours   []Period
@@ -71,7 +71,7 @@ func inValue(pp []Period, v int) bool {
 	return false
 }
 
-// MatchPeriods check if ref time matches any IngorePeriod
+// MatchPeriods check if ref time matches any PeriodDefinition
 func MatchPeriods(pp []PeriodDefinition , ref time.Time) bool {
 	for _, p := range pp {
 		if p.In(ref) {
@@ -81,6 +81,7 @@ func MatchPeriods(pp []PeriodDefinition , ref time.Time) bool {
 	return false
 }
 
+// ParsePeriod parses string into Period element, handling fixed value or range min-max
 func ParsePeriod(spec string, min int, max int) ([]Period, error) {
 	values := make([]Period, 0, 2)
 

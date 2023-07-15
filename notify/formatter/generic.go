@@ -6,6 +6,7 @@ import(
 	"github.com/sentiweb/monitor-lib/notify/types"
 )
 
+// GenericFormatter provides very simple formatting for notification.
 type GenericFormatter struct {
 
 }

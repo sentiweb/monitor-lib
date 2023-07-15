@@ -9,6 +9,7 @@ import (
 	"github.com/sentiweb/monitor-lib/notify/formatter"
 )
 
+// ConsoleNotifier shows Notification on the console. It's mainly for testing.
 type ConsoleNotifier struct {
 	delay time.Duration
 	formatter types.Formatter

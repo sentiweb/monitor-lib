@@ -6,6 +6,8 @@ import(
 	"github.com/sentiweb/monitor-lib/notify/types"
 )
 
+// MemoryNotifier stores notification in mempry
+// Mainly for testing purposes.
 type MemoryNotifier struct {
 	notifs map[string][]types.Notification
 }
