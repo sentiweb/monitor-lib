@@ -33,7 +33,7 @@ func WithSmtp(host string, port int, username string, password string) func(*Bas
 		port = 25
 	}
 	return func(s *BaseEmailSender) {
-		sender := NewSmtpSender(host, p, username, password)
+		sender := NewSmtpSender(host, port, username, password)
 		s.sender = sender
 	}
 }
