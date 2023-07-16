@@ -8,28 +8,29 @@ import (
 	"sync"
 	"time"
 
-	"gopkg.in/mail.v2"
-	"github.com/sentiweb/monitor-lib/utils"
-	"github.com/sentiweb/monitor-lib/notify/types"
+	"github.com/sentiweb/monitor-lib/notify/common"
 	"github.com/sentiweb/monitor-lib/notify/formatter"
+	"github.com/sentiweb/monitor-lib/notify/types"
+	"github.com/sentiweb/monitor-lib/utils"
+	"gopkg.in/mail.v2"
 )
 
 // Default types.Notification channel accepts all and send email
 // Can pool types.Notifications by waiting some delay before sending all
 type EmailNotifier struct {
-	to      []string
-	subject string
-	sender  types.EmailSender
-	pool    []types.Notification
-	sending chan bool
-	delay   time.Duration
-	tags    map[string]bool
+	to        []string
+	subject   string
+	sender    types.EmailSender
+	pool      []types.Notification
+	sending   chan bool
+	delay     time.Duration
+	tags      map[string]struct{}
 	formatter types.Formatter
-	mu      sync.RWMutex
+	mu        sync.RWMutex
 }
 
 // NewEmailNotifier creates an Email types.Notifier instance
-func NewEmailNotifier(sender types.EmailSender, to []string, subject string, delay time.Duration, tags map[string]bool) *EmailNotifier {
+func NewEmailNotifier(sender types.EmailSender, to []string, subject string, delay time.Duration, tags map[string]struct{}) *EmailNotifier {
 	return &EmailNotifier{
 		to:      to,
 		subject: subject,
@@ -41,7 +42,7 @@ func NewEmailNotifier(sender types.EmailSender, to []string, subject string, del
 
 // Accepts checks if the types.Notifier should send this types.Notification
 func (c *EmailNotifier) Accepts(n types.Notification) bool {
-	return checkTags(c.tags, n.Tags())
+	return common.CheckTags(c.tags, n.Tags())
 }
 
 func (c *EmailNotifier) String() string {
@@ -54,7 +55,7 @@ func (c *EmailNotifier) Start(ctx context.Context) error {
 	c.formatter = formatter.Get("email")
 
 	err := c.sender.Start()
-	if(err != nil) {
+	if err != nil {
 		return err
 	}
 
