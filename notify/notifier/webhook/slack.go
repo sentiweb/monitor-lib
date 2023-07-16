@@ -4,16 +4,16 @@ import (
 	"bytes"
 	"errors"
 	"net/http"
+
 	"github.com/sentiweb/monitor-lib/notify/notifier/webhook/generic"
 	"github.com/sentiweb/monitor-lib/notify/types"
 )
-
 
 type SlackMessage struct {
 	Text string `json:"text"`
 }
 
-func newSlackNotifierService(URL string) types.WebhookNotifierService {
+func NewSlackNotifierService(URL string) types.WebhookNotifierService {
 	return generic.NewGenericHttpService("slack", URL,
 		generic.WithPayload(slackPayload),
 		generic.WithCheckFunc(slackCheckResponse),
