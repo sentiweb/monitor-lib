@@ -1,12 +1,13 @@
 package notifier
 
-import(
-	"fmt"
+import (
 	"context"
+	"fmt"
+
 	"github.com/sentiweb/monitor-lib/notify/types"
 )
 
-// MemoryNotifier stores notification in mempry
+// MemoryNotifier stores notification in memory
 // Mainly for testing purposes.
 type MemoryNotifier struct {
 	notifs map[string][]types.Notification
@@ -24,7 +25,7 @@ func (c *MemoryNotifier) Accepts(n types.Notification) bool {
 func (c *MemoryNotifier) Send(ctx context.Context, n types.Notification) error {
 	id := fmt.Sprintf("%s", n.Service())
 	m, ok := c.notifs[id]
-	if(!ok) {
+	if !ok {
 		m = make([]types.Notification, 0)
 	}
 	m = append(m, n)
