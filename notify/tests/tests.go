@@ -1,10 +1,9 @@
-package types
+package tests
 
-import(
+import (
 	"fmt"
 	"time"
 )
-
 
 type MockService struct {
 	Name string
@@ -15,9 +14,9 @@ func (m *MockService) String() string {
 }
 
 type MockNotification struct {
-	StatusValue string
-	LabelValue string
-	ServiceValue *MockService
+	StatusValue   string
+	LabelValue    string
+	ServiceValue  *MockService
 	FromTimeValue time.Time
 }
 
@@ -42,9 +41,9 @@ func (m *MockNotification) Service() fmt.Stringer {
 }
 
 func (m *MockNotification) String() string {
-	return  m.LabelValue
+	return m.LabelValue
 }
 
 func NewMockNotification(status string, label string, time time.Time) *MockNotification {
-	return &MockNotification{StatusValue: status, LabelValue: label, ServiceValue: &MockService{Name:label}, FromTimeValue: time }
+	return &MockNotification{StatusValue: status, LabelValue: label, ServiceValue: &MockService{Name: label}, FromTimeValue: time}
 }

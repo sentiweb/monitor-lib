@@ -5,20 +5,22 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"strings"
 	"net/http"
+	"strings"
 	"testing"
 	"time"
+
+	"github.com/sentiweb/monitor-lib/notify/tests"
+
 	"github.com/sentiweb/monitor-lib/notify/notifier/webhook/generic"
-	"github.com/sentiweb/monitor-lib/notify/types"
+	utils_tests "github.com/sentiweb/monitor-lib/tests"
 	"github.com/sentiweb/monitor-lib/utils"
-	"github.com/sentiweb/monitor-lib/tests"
 )
 
 // MockClient is the mock client
 type MockClient struct {
-	StatusCode int
-	Body       string
+	StatusCode  int
+	Body        string
 	RequestBody string
 }
 
@@ -50,7 +52,7 @@ var _ utils.HTTPClientFactory = &MockClientFactory{}
 
 func TestHTTPNotifier(t *testing.T) {
 
-	defer tests.CaptureLog(t).Release()
+	defer utils_tests.CaptureLog(t).Release()
 
 	myFactory := &MockClientFactory{}
 
@@ -73,11 +75,11 @@ func TestHTTPNotifier(t *testing.T) {
 
 	fmt.Println(notifier)
 
-	notif := types.NewMockNotification("up", "test12341", time.Now())
+	notif := tests.NewMockNotification("up", "test12341", time.Now())
 
 	notifier.Send(context, notif)
 
-	aw := tests.NewAwait(time.Second, 100*time.Millisecond)
+	aw := utils_tests.NewAwait(time.Second, 100*time.Millisecond)
 
 	check := aw.Wait(func() bool {
 		return strings.Contains(client.RequestBody, "test12341")
