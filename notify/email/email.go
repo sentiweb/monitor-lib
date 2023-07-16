@@ -1,40 +1,42 @@
-notify
+package email
 
-import(
+import (
 	"context"
-	"log"
 	"errors"
-	"gopkg.in/mail.v2"
+	"log"
+
+	"github.com/sentiweb/monitor-lib/notify/types"
 	"github.com/sentiweb/monitor-lib/utils"
+	"gopkg.in/mail.v2"
 )
 
 // It's an implementation of types.EmailSender internal types.EmailSender implementations
 type BaseEmailSender struct {
-	from string
+	from     string
 	fromName string
-	sender types.EmailSender // Internal email sender
+	sender   types.EmailSender // Internal email sender
 }
 
-func New(from string, fromName string, options ...func(*BaseEmailSender)) (*BaseEmailSender) {
+func New(from string, fromName string, options ...func(*BaseEmailSender)) *BaseEmailSender {
 	svr := &BaseEmailSender{
-		from: from,
+		from:     from,
 		fromName: fromName,
 	}
 	for _, o := range options {
-	  o(svr)
+		o(svr)
 	}
 	return svr
 }
 
 func WithSmtp(host string, port int, username string, password string) func(*BaseEmailSender) {
-	if(port == 0) {
+	if port == 0 {
 		port = 25
 	}
 	return func(s *BaseEmailSender) {
 		sender := NewSmtpSender(host, p, username, password)
 		s.sender = sender
 	}
-  }
+}
 
 func WithFake(path string) func(*BaseEmailSender) {
 	return func(s *BaseEmailSender) {
@@ -43,11 +45,11 @@ func WithFake(path string) func(*BaseEmailSender) {
 }
 
 func (o *BaseEmailSender) Start() error {
-	if(o.sender == nil) {
+	if o.sender == nil {
 		return errors.New("Email sender must be defined")
 	}
-	if(!utils.IsEmailValid(o.from)) {
-		log.Printf("Bad email format for '%s'", o.From)
+	if !utils.IsEmailValid(o.from) {
+		log.Printf("Bad email format for '%s'", o.from)
 		return utils.ErrBadEmail
 	}
 	return nil
