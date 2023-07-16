@@ -32,21 +32,27 @@ func (h *NotificationHandler) AddNotifier(channel types.Notifier) {
 	h.channels = append(h.channels, channel)
 }
 
-// Handle starts the listenning for notification from the input channel
-func (h *NotificationHandler) Handle(ctx context.Context, input <-chan types.Notification) error {
-	log.Printf("Starting Notification Hander with %s timeout", h.timeout)
-
+// Start the handler
+// Start each notifier and run the listening loop in a go routine
+func (h *NotificationHandler) Start(ctx context.Context, input <-chan types.Notification) error {
 	for _, channel := range h.channels {
 		err := channel.Start(ctx)
 		if err != nil {
 			return err
 		}
 	}
+	go h.handle(ctx, input)
+	return nil
+}
 
+// Handle starts the listening for notification from the input channel
+func (h *NotificationHandler) handle(ctx context.Context, input <-chan types.Notification) {
+	log.Printf("Starting Notification Hander with %s timeout", h.timeout)
 	for {
 		select {
 		case <-ctx.Done():
-			return ctx.Err()
+			log.Println("NotificationHandler", ctx.Err())
+			return
 
 		case notif := <-input:
 			log.Printf("<- Notification<%s>", notif)
