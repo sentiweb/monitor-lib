@@ -29,7 +29,9 @@ func TestEmailNotifier(t *testing.T) {
 
 	fmt.Println(notifier)
 
-	notif := tests.NewMockNotification("up", "test12341", time.Now())
+	serviceName := "test12341"
+
+	notif := tests.NewMockNotification(serviceName, "up", serviceName, time.Now())
 
 	notifier.Send(context, notif)
 

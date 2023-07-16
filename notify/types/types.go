@@ -1,11 +1,12 @@
 package types
 
 import (
-	"fmt"
 	"context"
+	"fmt"
 	"time"
-	"gopkg.in/mail.v2"
+
 	"github.com/sentiweb/monitor-lib/utils"
+	"gopkg.in/mail.v2"
 )
 
 // EmailSender An object able to send an email
@@ -15,7 +16,7 @@ type EmailSender interface {
 }
 
 const (
-	NotificationStatusUp = "up"
+	NotificationStatusUp   = "up"
 	NotificationStatusDown = "down"
 )
 
@@ -23,10 +24,10 @@ const (
 type Notification interface {
 	fmt.Stringer
 	Status() string // Notification status type (use NotificationStatusUp & NotificationStatusDown)
-	Label() string // Notification Message to send
+	Label() string  // Notification Message to send
 	FromTime() time.Time
-	Tags() []string // List of tags to handle routing
-	Service() fmt.Stringer // Provide a name identifier of the entity for which the notification is raised
+	Tags() []string      // List of tags to handle routing
+	ServiceName() string // Provide a name identifier of the entity for which the notification is raised
 }
 
 // Notifier is able to send Notification
@@ -39,10 +40,10 @@ type Notifier interface {
 	Start(context.Context) error
 }
 
-// WebhookNotifierService describes a webservice to send a message to using json 
+// WebhookNotifierService describes a webservice to send a message to using json
 // It's wrapped by an HTTPNotifier handling the request
 type WebhookNotifierService interface {
-	Send(ctx context.Context, client utils.HTTPClient, notif Notification) (error)
+	Send(ctx context.Context, client utils.HTTPClient, notif Notification) error
 	Start() error
 }
 

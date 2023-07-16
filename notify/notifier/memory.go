@@ -2,7 +2,6 @@ package notifier
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/sentiweb/monitor-lib/notify/types"
 )
@@ -23,7 +22,7 @@ func (c *MemoryNotifier) Accepts(n types.Notification) bool {
 }
 
 func (c *MemoryNotifier) Send(ctx context.Context, n types.Notification) error {
-	id := fmt.Sprintf("%s", n.Service())
+	id := n.ServiceName()
 	m, ok := c.notifs[id]
 	if !ok {
 		m = make([]types.Notification, 0)

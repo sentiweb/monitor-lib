@@ -36,7 +36,7 @@ func TestNotificationHanlder(t *testing.T) {
 
 	serviceName := "test12341"
 
-	notif := tests.NewMockNotification("up", serviceName, time.Now())
+	notif := tests.NewMockNotification(serviceName, "up", serviceName, time.Now())
 
 	notifChan <- notif
 

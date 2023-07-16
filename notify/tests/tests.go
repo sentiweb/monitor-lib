@@ -1,22 +1,13 @@
 package tests
 
 import (
-	"fmt"
 	"time"
 )
-
-type MockService struct {
-	Name string
-}
-
-func (m *MockService) String() string {
-	return m.Name
-}
 
 type MockNotification struct {
 	StatusValue   string
 	LabelValue    string
-	ServiceValue  *MockService
+	ServiceValue  string
 	FromTimeValue time.Time
 }
 
@@ -36,7 +27,7 @@ func (m *MockNotification) Tags() []string {
 	return []string{}
 }
 
-func (m *MockNotification) Service() fmt.Stringer {
+func (m *MockNotification) ServiceName() string {
 	return m.ServiceValue
 }
 
@@ -44,6 +35,6 @@ func (m *MockNotification) String() string {
 	return m.LabelValue
 }
 
-func NewMockNotification(status string, label string, time time.Time) *MockNotification {
-	return &MockNotification{StatusValue: status, LabelValue: label, ServiceValue: &MockService{Name: label}, FromTimeValue: time}
+func NewMockNotification(service string, status string, label string, time time.Time) *MockNotification {
+	return &MockNotification{StatusValue: status, LabelValue: label, ServiceValue: label, FromTimeValue: time}
 }

@@ -75,14 +75,15 @@ func TestHTTPNotifier(t *testing.T) {
 
 	fmt.Println(notifier)
 
-	notif := tests.NewMockNotification("up", "test12341", time.Now())
+	serviceName := "test12341"
+	notif := tests.NewMockNotification(serviceName, "up", serviceName, time.Now())
 
 	notifier.Send(context, notif)
 
 	aw := utils_tests.NewAwait(time.Second, 100*time.Millisecond)
 
 	check := aw.Wait(func() bool {
-		return strings.Contains(client.RequestBody, "test12341")
+		return strings.Contains(client.RequestBody, serviceName)
 	})
 
 	t.Logf("Result %t, waited %s", check, aw.TimeWaited())
