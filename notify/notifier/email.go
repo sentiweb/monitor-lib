@@ -15,8 +15,8 @@ import (
 	"gopkg.in/mail.v2"
 )
 
-// Default types.Notification channel accepts all and send email
-// Can pool types.Notifications by waiting some delay before sending all
+// EmailNotifier sends notification to email thought an EmailSender instance
+// A pooling mechanism can be used to pool several notifications arriving closely (using a pooling time window) together in the same email
 type EmailNotifier struct {
 	to        []string
 	subject   string
@@ -29,27 +29,27 @@ type EmailNotifier struct {
 	mu        sync.RWMutex
 }
 
-// NewEmailNotifier creates an Email types.Notifier instance
-func NewEmailNotifier(sender types.EmailSender, to []string, subject string, delay time.Duration, tags map[string]struct{}) *EmailNotifier {
+// NewEmailNotifier creates an Email notifier instance
+func NewEmailNotifier(sender types.EmailSender, to []string, subject string, poolingDelay time.Duration, tags map[string]struct{}) *EmailNotifier {
 	return &EmailNotifier{
 		to:      to,
 		subject: subject,
 		sender:  sender,
-		delay:   delay,
+		delay:   poolingDelay,
 		tags:    tags,
 	}
 }
 
-// Accepts checks if the types.Notifier should send this types.Notification
+// Accepts checks if the notifier should send this types.Notification
 func (c *EmailNotifier) Accepts(n types.Notification) bool {
 	return common.CheckTags(c.tags, n.Tags())
 }
 
 func (c *EmailNotifier) String() string {
-	return fmt.Sprintf("EmailNotifier<%s, %s>", c.to, c.delay)
+	return fmt.Sprintf("EmailNotifier<to:%s, pool:%s, tags:%s>", c.to, c.delay, c.tags)
 }
 
-// Start the types.Notifier service
+// Start the notifier service
 func (c *EmailNotifier) Start(ctx context.Context) error {
 
 	c.formatter = formatter.Get("email")
@@ -72,7 +72,7 @@ func (c *EmailNotifier) Start(ctx context.Context) error {
 	return nil
 }
 
-// Send Email types.Notification
+// Send Email Notification
 func (c *EmailNotifier) Send(ctx context.Context, n types.Notification) error {
 	c.mu.Lock()
 	c.pool = append(c.pool, n)
