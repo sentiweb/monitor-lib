@@ -23,8 +23,10 @@ type HTTPNotifier struct {
 	client   utils.HTTPClient
 }
 
+type HTTPNotifierOption func(*HTTPNotifier)
+
 // NewHTTPNotifier create a new HTTP Notifier service connected to specific Webhook Service
-func NewHTTPNotifier(service types.WebhookNotifierService, options ...func(*HTTPNotifier)) *HTTPNotifier {
+func NewHTTPNotifier(service types.WebhookNotifierService, options ...HTTPNotifierOption) *HTTPNotifier {
 	h := &HTTPNotifier{
 		service:  service,
 		timeout:  time.Second * 10,
