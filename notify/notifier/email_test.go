@@ -42,4 +42,8 @@ func TestEmailNotifier(t *testing.T) {
 	})
 
 	t.Logf("Result %t, waited %s", check, aw.TimeWaited())
+
+	if !check {
+		t.Error("Notification not sent")
+	}
 }

@@ -14,7 +14,7 @@ const (
 	MimeJson = "application/json"
 )
 
-// HTTPClient interface
+// HTTPClient interface. This enable the use of HTTPClientFactory and the use of another http client (for testing purposes for example)
 type HTTPClient interface {
 	Do(req *http.Request) (*http.Response, error)
 }
