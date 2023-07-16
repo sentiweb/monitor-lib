@@ -30,13 +30,13 @@ type EmailNotifier struct {
 }
 
 // NewEmailNotifier creates an Email notifier instance
-func NewEmailNotifier(sender types.EmailSender, to []string, subject string, poolingDelay time.Duration, tags map[string]struct{}) *EmailNotifier {
+func NewEmailNotifier(sender types.EmailSender, to []string, subject string, poolingDelay time.Duration, tags []string) *EmailNotifier {
 	return &EmailNotifier{
 		to:      to,
 		subject: subject,
 		sender:  sender,
 		delay:   poolingDelay,
-		tags:    tags,
+		tags:    common.TagsToMap(tags),
 	}
 }
 
