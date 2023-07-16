@@ -24,3 +24,7 @@ func (s *MemorySender) Send(ctx context.Context, msg *mail.Message) error {
 	s.messages = append(s.messages, msg)
 	return nil
 }
+
+func (s *MemorySender) Messages() []*mail.Message {
+	return s.messages
+}
