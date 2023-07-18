@@ -25,7 +25,7 @@ type GenericHttpService struct {
 	Payload PayloadFunc                  // Create the  payload content
 	Check   func(r *http.Response) error // Check the returned response
 	Request func(req *http.Request)
-
+	Yaml    func() (interface{}, error) // Yaml serializer
 	// Private field
 	formatter types.Formatter
 }
@@ -40,6 +40,9 @@ func NewGenericHttpService(name string, URL string, options ...func(*GenericHttp
 		Payload: defaultPayloadFunc,
 		Request: defaultRequestFunc,
 		Check:   defaultCheckFunc,
+		Yaml: func() (interface{}, error) {
+			return struct{}{}, nil
+		},
 	}
 	for _, o := range options {
 		o(h)
@@ -130,4 +133,19 @@ func (g *GenericHttpService) Send(ctx context.Context, client utils.HTTPClient, 
 func (g *GenericHttpService) Start() error {
 	g.formatter = formatter.Get(g.Name)
 	return nil
+}
+
+func (c *GenericHttpService) MarshalYAML() (interface{}, error) {
+
+	v, err := c.Yaml()
+
+	if err != nil {
+		return nil, err
+	}
+
+	m := make(map[string]interface{}, 1)
+
+	m[c.Name] = v
+
+	return m, nil
 }

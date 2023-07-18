@@ -5,13 +5,14 @@ import (
 	"fmt"
 	"log"
 	"time"
-	"github.com/sentiweb/monitor-lib/notify/types"
+
 	"github.com/sentiweb/monitor-lib/notify/formatter"
+	"github.com/sentiweb/monitor-lib/notify/types"
 )
 
 // ConsoleNotifier shows Notification on the console. It's mainly for testing.
 type ConsoleNotifier struct {
-	delay time.Duration
+	delay     time.Duration
 	formatter types.Formatter
 }
 
@@ -37,4 +38,8 @@ func (c *ConsoleNotifier) Send(ctx context.Context, n types.Notification) error 
 
 func (c *ConsoleNotifier) String() string {
 	return fmt.Sprintf("ConsoleNotifier<%s>", c.delay)
+}
+
+func (p *ConsoleNotifier) MarshalText() (text []byte, err error) {
+	return []byte(p.String()), nil
 }

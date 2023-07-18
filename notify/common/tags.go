@@ -26,3 +26,11 @@ func TagsToMap(tags []string) map[string]struct{} {
 	}
 	return m
 }
+
+func MapToTags(tagMap map[string]struct{}) []string {
+	m := make([]string, 0, len(tagMap))
+	for k := range tagMap {
+		m = append(m, k)
+	}
+	return m
+}

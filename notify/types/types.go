@@ -11,6 +11,7 @@ import (
 
 // EmailSender An object able to send an email
 type EmailSender interface {
+	fmt.Stringer
 	Start() error // Allow the sender to initialize
 	Send(ctx context.Context, msg *mail.Message) error
 }

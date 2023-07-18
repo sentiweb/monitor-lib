@@ -49,6 +49,24 @@ func (c *EmailNotifier) String() string {
 	return fmt.Sprintf("EmailNotifier<to:%s, pool:%s, tags:%s>", c.to, c.delay, c.tags)
 }
 
+func (c *EmailNotifier) MarshalYAML() (interface{}, error) {
+	var m struct {
+		Email struct {
+			To      []string          `yaml:"to"`
+			Subject string            `yaml:"subject"`
+			Sender  types.EmailSender `yaml:"sender"`
+			Delay   time.Duration     `yaml:"delay"`
+			Tags    []string          `yaml:"tags,omitempty"`
+		} `yaml:"email"`
+	}
+	m.Email.To = c.to
+	m.Email.Subject = c.subject
+	m.Email.Delay = c.delay
+	m.Email.Sender = c.sender
+	m.Email.Tags = common.MapToTags(c.tags)
+	return m, nil
+}
+
 // Start the notifier service
 func (c *EmailNotifier) Start(ctx context.Context) error {
 

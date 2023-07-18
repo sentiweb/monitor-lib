@@ -42,3 +42,7 @@ func (c *MemoryNotifier) String() string {
 func (c *MemoryNotifier) Notifications(id string) []types.Notification {
 	return c.notifs[id]
 }
+
+func (c *MemoryNotifier) MarshalYAML() (interface{}, error) {
+	return "memory", nil
+}

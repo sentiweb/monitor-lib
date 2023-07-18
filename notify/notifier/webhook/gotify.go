@@ -2,26 +2,27 @@ package webhook
 
 import (
 	"fmt"
-	
+
 	"net/url"
-	"github.com/sentiweb/monitor-lib/notify/types"
+
 	"github.com/sentiweb/monitor-lib/notify/notifier/webhook/generic"
+	"github.com/sentiweb/monitor-lib/notify/types"
 )
 
 type GotifyMessage struct {
-	Title string `json:"title"`
-	Message string  `json:"message"`
+	Title   string `json:"title"`
+	Message string `json:"message"`
 }
 
 func NewGotifyService(URL string, token string) types.WebhookNotifierService {
-	
-	params := url.Values{}
-    params.Add("token", token)
 
-	url := fmt.Sprintf("%s/message?%s", URL, params.Encode()) 
-	g := generic.NewGenericHttpService("gotify", url, 
-					generic.WithPayload(gotifyPayload),
-				)	
+	params := url.Values{}
+	params.Add("token", token)
+
+	url := fmt.Sprintf("%s/message?%s", URL, params.Encode())
+	g := generic.NewGenericHttpService("gotify", url,
+		generic.WithPayload(gotifyPayload),
+	)
 	return g
 }
 

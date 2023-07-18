@@ -117,3 +117,21 @@ func (c *HTTPNotifier) handle(ctx context.Context) error {
 
 	}
 }
+
+// MarshalYAML
+// Accept Mashshal to Yaml (for output representation)
+func (c *HTTPNotifier) MarshalYAML() (interface{}, error) {
+	var m struct {
+		W struct {
+			Service types.WebhookNotifierService
+			Pool    uint          `yaml:"pool"`
+			Timeout time.Duration `yaml:"timeout"`
+			Tags    []string      `yaml:"tags,omitempty"`
+		} `yaml:"webhook"`
+	}
+	m.W.Service = c.service
+	m.W.Pool = c.poolSize
+	m.W.Timeout = c.timeout
+	m.W.Tags = common.MapToTags(c.tags)
+	return m, nil
+}

@@ -46,3 +46,12 @@ func (s *FileSender) Send(ctx context.Context, msg *mail.Message) error {
 	_, err = msg.WriteTo(f)
 	return err
 }
+
+func (s *FileSender) String() string {
+	// Nothing to do
+	return fmt.Sprintf("file:///%s", s.path)
+}
+
+func (p *FileSender) MarshalText() (text []byte, err error) {
+	return []byte(p.String()), nil
+}

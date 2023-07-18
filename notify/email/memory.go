@@ -28,3 +28,12 @@ func (s *MemorySender) Send(ctx context.Context, msg *mail.Message) error {
 func (s *MemorySender) Messages() []*mail.Message {
 	return s.messages
 }
+
+func (s *MemorySender) String() string {
+	// Nothing to do
+	return "memory://"
+}
+
+func (p *MemorySender) MarshalText() (text []byte, err error) {
+	return []byte(p.String()), nil
+}
