@@ -1,6 +1,7 @@
 package period
 
 import (
+	"encoding"
 	"fmt"
 	"strconv"
 	"strings"
@@ -89,7 +90,7 @@ func (p *PeriodDefinition) String() string {
 	return fmt.Sprintf("%s %s %s %s %s", min, h, days, months, dows)
 }
 
-func (p *PeriodDefinition) MarshalText() (text []byte, err error) {
+func (p PeriodDefinition) MarshalText() (text []byte, err error) {
 	return []byte(p.String()), nil
 }
 
@@ -157,3 +158,6 @@ func ParsePeriod(spec string, min int, max int) ([]Period, error) {
 	}
 	return values, nil
 }
+
+// Check the marshaller is correctly implemented
+var _ encoding.TextMarshaler = PeriodDefinition{}
