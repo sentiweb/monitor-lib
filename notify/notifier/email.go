@@ -12,6 +12,7 @@ import (
 	"github.com/sentiweb/monitor-lib/notify/formatter"
 	"github.com/sentiweb/monitor-lib/notify/types"
 	"github.com/sentiweb/monitor-lib/utils"
+	"github.com/sentiweb/monitor-lib/datastruct/sets"
 	"gopkg.in/mail.v2"
 )
 
@@ -24,7 +25,7 @@ type EmailNotifier struct {
 	pool      []types.Notification
 	sending   chan bool
 	delay     time.Duration
-	tags      map[string]struct{}
+	tags      *sets.Set[string]
 	formatter types.Formatter
 	mu        sync.RWMutex
 }

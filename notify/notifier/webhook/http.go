@@ -9,6 +9,7 @@ import (
 	"github.com/sentiweb/monitor-lib/notify/common"
 	"github.com/sentiweb/monitor-lib/notify/types"
 	"github.com/sentiweb/monitor-lib/utils"
+	"github.com/sentiweb/monitor-lib/datastruct/sets"
 )
 
 // HTTPNotifier implements a notifier service sending the notification using an http request
@@ -18,7 +19,7 @@ type HTTPNotifier struct {
 	service  types.WebhookNotifierService
 	poolSize uint
 	timeout  time.Duration
-	tags     map[string]struct{}
+	tags     *sets.Set[string]
 	out      chan types.Notification
 	client   utils.HTTPClient
 }
