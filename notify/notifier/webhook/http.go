@@ -6,10 +6,10 @@ import (
 	"log"
 	"time"
 
+	"github.com/sentiweb/monitor-lib/datastruct/sets"
 	"github.com/sentiweb/monitor-lib/notify/common"
 	"github.com/sentiweb/monitor-lib/notify/types"
 	"github.com/sentiweb/monitor-lib/utils"
-	"github.com/sentiweb/monitor-lib/datastruct/sets"
 )
 
 // HTTPNotifier implements a notifier service sending the notification using an http request
@@ -60,6 +60,25 @@ func WithPoolSize(size uint) func(*HTTPNotifier) {
 	return func(h *HTTPNotifier) {
 		h.poolSize = size
 	}
+}
+
+// WebHookOptions create options from arguments list, helper for some cases
+func WebHookOptions(timeout string, pool uint, tags []string) ([]HTTPNotifierOption, error) {
+	o := make([]HTTPNotifierOption, 0)
+	if len(tags) > 0 {
+		o = append(o, WithTags(tags))
+	}
+	if timeout != "" {
+		t, err := time.ParseDuration(timeout)
+		if err != nil {
+			return o, fmt.Errorf("timeout must be a duration : %s", err)
+		}
+		o = append(o, WithTimeout(t))
+	}
+	if pool > 0 {
+		o = append(o, WithPoolSize(pool))
+	}
+	return o, nil
 }
 
 // Create the http Client,
