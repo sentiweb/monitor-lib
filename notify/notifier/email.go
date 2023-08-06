@@ -8,11 +8,11 @@ import (
 	"sync"
 	"time"
 
+	"github.com/sentiweb/monitor-lib/datastruct/sets"
 	"github.com/sentiweb/monitor-lib/notify/common"
 	"github.com/sentiweb/monitor-lib/notify/formatter"
 	"github.com/sentiweb/monitor-lib/notify/types"
 	"github.com/sentiweb/monitor-lib/utils"
-	"github.com/sentiweb/monitor-lib/datastruct/sets"
 	"gopkg.in/mail.v2"
 )
 

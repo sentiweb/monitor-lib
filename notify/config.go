@@ -1,8 +1,9 @@
 package notify
 
-import(
-	"github.com/sentiweb/monitor-lib/notify/types"
+import (
 	"time"
+
+	"github.com/sentiweb/monitor-lib/notify/types"
 )
 
 type NotifierBuilder struct {
@@ -21,5 +22,3 @@ func (builder *NotifierBuilder) Get() *NotificationHandler {
 func (builder *NotifierBuilder) AddNotifier(notifier types.Notifier) {
 	builder.handler.AddNotifier(notifier)
 }
-
-
